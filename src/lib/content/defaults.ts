@@ -200,9 +200,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   ],
   whyPoints: DEFAULT_WHY_POINTS,
   deliveryNotes: DEFAULT_DELIVERY_NOTES,
-  footerText: "Returns/delivery policy — add via CMS",
-  contactEmail: "",
+  footerText: "Proudly made in Cape Town, South Africa.",
+  contactEmail: "savrnutrition@gmail.com",
   instagramHandle: "",
-  businessAddress: "",
+  businessAddress: "Lovers' Walk, Rondebosch, Cape Town, 7700, South Africa",
   returnsPolicy: "",
 };
