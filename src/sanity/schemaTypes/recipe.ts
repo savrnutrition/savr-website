@@ -8,10 +8,11 @@ export const recipe = defineType({
   title: "Recipe",
   type: "document",
   fields: [
-    defineField({ name: "title", title: "Title", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({ name: "title", title: "Recipe title", type: "string", validation: (Rule) => Rule.required() }),
     defineField({
       name: "category",
       title: "Category",
+      description: "Which filter tab this recipe shows under on the Recipes section.",
       type: "string",
       options: {
         list: [
@@ -28,12 +29,25 @@ export const recipe = defineType({
     }),
     defineField({
       name: "flavour",
-      title: "Flavour used",
+      title: "SAVR flavour used",
+      description: "Pick from the flavours already set up under \"Flavours\".",
       type: "reference",
       to: [{ type: "flavour" }],
     }),
-    defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
-    defineField({ name: "body", title: "Recipe body", type: "array", of: [{ type: "block" }] }),
+    defineField({
+      name: "image",
+      title: "Photo",
+      description: "Click to upload a photo, then drag to set the focal point.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "body",
+      title: "Recipe (ingredients, method, etc.)",
+      description: "Write like a normal document — use the toolbar for bold, lists, and headings.",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
   ],
   preview: {
     select: { title: "title", subtitle: "category" },
