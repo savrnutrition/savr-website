@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* SAVR brand colours — keep in sync with src/lib/brand.ts */
+  --color-paper: #f8f9f0;
+  --color-tan: #d8bf9f;
+  --color-tomato: #a83637;
+  --color-tomato-dark: #832a2b;
+  --color-olive: #a7a376;
+  --color-brown: #844f39;
+  --color-ink: #2a2420;
+  --color-ink-soft: #6b6558;
+  --color-line: #e3ddc9;
+
+  /* Font swap point — see src/lib/brand.ts for how to bring in the
+     licensed Tan Ashford / Tan Angleton / Neue Montreal fonts later. */
+  --font-display: var(--font-fraunces), "Fraunces", serif;
+  --font-display-secondary: var(--font-playfair), "Playfair Display", serif;
+  --font-body: var(--font-inter), "Inter", sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: var(--color-paper);
+  --color-tan: var(--color-tan);
+  --color-tomato: var(--color-tomato);
+  --color-tomato-dark: var(--color-tomato-dark);
+  --color-olive: var(--color-olive);
+  --color-brown: var(--color-brown);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-line: var(--color-line);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-display: var(--font-display);
+  --font-display-secondary: var(--font-display-secondary);
+  --font-body: var(--font-body);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
 }
