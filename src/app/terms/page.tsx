@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Terms of Service — SAVR Nutrition",
 };
 
+export const revalidate = 60;
+
 export default async function TermsPage() {
   const settings = await fetchSiteSettings();
 

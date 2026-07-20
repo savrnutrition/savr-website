@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Privacy Policy — SAVR Nutrition",
 };
 
+export const revalidate = 60;
+
 export default async function PrivacyPage() {
   const settings = await fetchSiteSettings();
 

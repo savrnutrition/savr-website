@@ -9,6 +9,10 @@ import { FaqSection } from "@/components/site/FaqSection";
 import { ContactSection } from "@/components/site/ContactSection";
 import { Footer } from "@/components/site/Footer";
 
+// Content is edited in Sanity Studio by non-technical team members — refetch
+// periodically so their changes go live without needing a redeploy.
+export const revalidate = 60;
+
 export default async function HomePage() {
   const [settings, flavours, founders, faqs, recipes] = await Promise.all([
     fetchSiteSettings(),

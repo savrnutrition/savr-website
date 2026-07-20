@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Shipping & Returns — SAVR Nutrition",
 };
 
+export const revalidate = 60;
+
 export default async function ReturnsPage() {
   const settings = await fetchSiteSettings();
 
