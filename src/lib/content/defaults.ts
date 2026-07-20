@@ -93,7 +93,7 @@ export const DEFAULT_FLAVOURS: Flavour[] = [
   },
 ];
 
-export const DEFAULT_FOUNDERS: Founder[] = [1, 2, 3].map((i) => ({
+export const DEFAULT_FOUNDERS: Founder[] = [1, 2, 3, 4, 5, 6, 7].map((i) => ({
   _id: `placeholder-founder-${i}`,
   name: "Founder name — add via CMS",
   role: "",
@@ -202,7 +202,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   deliveryNotes: DEFAULT_DELIVERY_NOTES,
   footerText: "Proudly made in Cape Town, South Africa.",
   contactEmail: "savrnutrition@gmail.com",
-  instagramHandle: "",
+  instagramHandle: "@savr.nutrition",
   businessAddress: "Lovers' Walk, Rondebosch, Cape Town, 7700, South Africa",
   returnsPolicy: "",
 };

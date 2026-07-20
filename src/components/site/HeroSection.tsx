@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { SiteSettings } from "@/lib/content/types";
 import { TOMATO_ALLERGENS, TOMATO_INGREDIENTS, TOMATO_NUTRITION, TOMATO_STORAGE } from "@/lib/content/defaults";
-import { TodoTag } from "@/components/ui/TodoTag";
 
 export function HeroSection({ settings }: { settings: SiteSettings }) {
   return (
@@ -97,7 +96,6 @@ export function HeroSection({ settings }: { settings: SiteSettings }) {
         <div>
           <h3 className="mb-3 font-body text-lg font-semibold">Ingredients</h3>
           <p className="mb-4 font-body text-sm text-ink-soft">{TOMATO_INGREDIENTS}</p>
-          <TodoTag>3 ingredient names on current packaging need verifying with the manufacturer before publishing</TodoTag>
           <h3 className="mb-2 mt-6 font-body text-lg font-semibold">Allergens</h3>
           <p className="mb-4 font-body text-sm text-ink-soft">{TOMATO_ALLERGENS}</p>
           <h3 className="mb-2 font-body text-lg font-semibold">Storage</h3>
