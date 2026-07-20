@@ -42,7 +42,7 @@ export async function appendOrderRow(order: OrderPayload) {
           order.orderId,
           `${order.customer.firstName} ${order.customer.lastName}`,
           order.customer.email,
-          order.customer.phone,
+          `'${order.customer.phone}`,
           `${order.customer.street}, ${order.customer.city} ${order.customer.postal}`,
           order.quantity,
           deliveryLabel,
