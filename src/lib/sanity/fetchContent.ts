@@ -1,4 +1,6 @@
+import { draftMode } from "next/headers";
 import { sanityClient } from "@/sanity/client";
+import { readToken } from "@/sanity/env";
 import {
   DEFAULT_FAQS,
   DEFAULT_FLAVOURS,
@@ -18,36 +20,57 @@ const RECIPES_QUERY = `*[_type == "recipe"]`;
 // document is missing, or a field hasn't been filled in — so the site is
 // always fully populated even before the team's Sanity project exists.
 
+// When Draft Mode is on (Sanity's visual/click-to-edit preview, entered via
+// /api/draft-mode/enable), read unpublished drafts with stega-encoded
+// content so @sanity/visual-editing can draw click-to-edit overlays on the
+// real page. Everyone else always sees only published content.
+async function getClient() {
+  if (!sanityClient) return null;
+  const { isEnabled } = await draftMode();
+  if (isEnabled && readToken) {
+    return sanityClient.withConfig({
+      token: readToken,
+      perspective: "drafts",
+      useCdn: false,
+      stega: { studioUrl: "/studio" },
+    });
+  }
+  return sanityClient;
+}
+
 export async function fetchSiteSettings(): Promise<SiteSettings> {
-  if (!sanityClient) return DEFAULT_SITE_SETTINGS;
-  const doc = await sanityClient.fetch<Partial<SiteSettings> | null>(
-    SITE_SETTINGS_QUERY
-  );
+  const client = await getClient();
+  if (!client) return DEFAULT_SITE_SETTINGS;
+  const doc = await client.fetch<Partial<SiteSettings> | null>(SITE_SETTINGS_QUERY);
   if (!doc) return DEFAULT_SITE_SETTINGS;
   return { ...DEFAULT_SITE_SETTINGS, ...stripEmpty(doc) };
 }
 
 export async function fetchFlavours(): Promise<Flavour[]> {
-  if (!sanityClient) return DEFAULT_FLAVOURS;
-  const docs = await sanityClient.fetch<Flavour[]>(FLAVOURS_QUERY);
+  const client = await getClient();
+  if (!client) return DEFAULT_FLAVOURS;
+  const docs = await client.fetch<Flavour[]>(FLAVOURS_QUERY);
   return docs?.length ? docs : DEFAULT_FLAVOURS;
 }
 
 export async function fetchFounders(): Promise<Founder[]> {
-  if (!sanityClient) return DEFAULT_FOUNDERS;
-  const docs = await sanityClient.fetch<Founder[]>(FOUNDERS_QUERY);
+  const client = await getClient();
+  if (!client) return DEFAULT_FOUNDERS;
+  const docs = await client.fetch<Founder[]>(FOUNDERS_QUERY);
   return docs?.length ? docs : DEFAULT_FOUNDERS;
 }
 
 export async function fetchFaqs(): Promise<FaqItem[]> {
-  if (!sanityClient) return DEFAULT_FAQS;
-  const docs = await sanityClient.fetch<FaqItem[]>(FAQS_QUERY);
+  const client = await getClient();
+  if (!client) return DEFAULT_FAQS;
+  const docs = await client.fetch<FaqItem[]>(FAQS_QUERY);
   return docs?.length ? docs : DEFAULT_FAQS;
 }
 
 export async function fetchRecipes(): Promise<Recipe[]> {
-  if (!sanityClient) return [];
-  return (await sanityClient.fetch<Recipe[]>(RECIPES_QUERY)) ?? [];
+  const client = await getClient();
+  if (!client) return [];
+  return (await client.fetch<Recipe[]>(RECIPES_QUERY)) ?? [];
 }
 
 // Drop empty-string/undefined/[]-length-0 fields so defaults show through

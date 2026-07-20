@@ -11,3 +11,7 @@ export const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 export const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 
 export const isSanityConfigured = Boolean(projectId && dataset);
+
+// Read-only token used server-side only, to fetch draft (unpublished)
+// content for the live/visual preview. Never exposed to the browser.
+export const readToken = process.env.SANITY_API_READ_TOKEN;

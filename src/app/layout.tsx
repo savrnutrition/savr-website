@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Playfair_Display, Inter } from "next/font/google";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing/client-component";
 import "./globals.css";
 
 // FONT SWAP: replace these next/font/google calls with next/font/local once
@@ -41,11 +43,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
   return (
     <html
       lang="en"
@@ -53,6 +57,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
         {children}
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );
