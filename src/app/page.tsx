@@ -26,7 +26,7 @@ export default async function HomePage() {
     <>
       <Header />
       <main>
-        <HeroSection settings={settings} />
+        <HeroSection settings={settings} flavours={flavours} />
         <ShopSection flavours={flavours} settings={settings} />
         <RecipesSection recipes={recipes} />
         <WhySection points={settings.whyPoints} />

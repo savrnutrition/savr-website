@@ -13,7 +13,9 @@ const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
 const FLAVOURS_QUERY = `*[_type == "flavour"] | order(select(status == "available" => 0, 1) asc, name asc)`;
 const FOUNDERS_QUERY = `*[_type == "founder"] | order(order asc)`;
 const FAQS_QUERY = `*[_type == "faqItem"] | order(order asc)`;
-const RECIPES_QUERY = `*[_type == "recipe"]`;
+const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category, image, body, "flavourName": flavour->name }`;
+const RECIPES_QUERY = `*[_type == "recipe" && defined(slug.current)] | order(title asc) ${RECIPE_PROJECTION}`;
+const RECIPE_BY_SLUG_QUERY = `*[_type == "recipe" && slug.current == $slug][0] ${RECIPE_PROJECTION}`;
 
 // Every fetch* helper degrades to the tech-spec-sourced defaults (see
 // src/lib/content/defaults.ts) whenever Sanity isn't configured yet, a
@@ -75,6 +77,12 @@ export async function fetchRecipes(): Promise<Recipe[]> {
   const client = await getClient();
   if (!client) return [];
   return (await client.fetch<Recipe[]>(RECIPES_QUERY)) ?? [];
+}
+
+export async function fetchRecipeBySlug(slug: string): Promise<Recipe | null> {
+  const client = await getClient();
+  if (!client) return null;
+  return (await client.fetch<Recipe | null>(RECIPE_BY_SLUG_QUERY, { slug })) ?? null;
 }
 
 // Drop empty-string/undefined/[]-length-0 fields so defaults show through

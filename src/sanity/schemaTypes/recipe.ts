@@ -1,14 +1,26 @@
 import { defineField, defineType } from "sanity";
 
-// Phase 2 content (post-expo) — schema is ready now so the team can start
-// populating recipes in Sanity whenever they have content, without needing
-// a developer to add fields later.
 export const recipe = defineType({
   name: "recipe",
   title: "Recipe",
   type: "document",
   fields: [
     defineField({ name: "title", title: "Recipe title", type: "string", validation: (Rule) => Rule.required() }),
+    defineField({
+      name: "slug",
+      title: "URL slug",
+      description: "Just click \"Generate\" — this becomes the recipe's web address, e.g. savrnutrition.co.za/recipes/creamy-tomato-pasta.",
+      type: "slug",
+      options: { source: "title" },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "excerpt",
+      title: "Short description",
+      description: "One sentence shown on the recipe's card. If left blank, the card just shows the title.",
+      type: "text",
+      rows: 2,
+    }),
     defineField({
       name: "category",
       title: "Category",
@@ -37,7 +49,7 @@ export const recipe = defineType({
     defineField({
       name: "image",
       title: "Photo",
-      description: "Click to upload a photo, then drag to set the focal point.",
+      description: "Click to upload a photo, then drag to set the focal point. Shown on the card and the recipe page.",
       type: "image",
       options: { hotspot: true },
     }),
@@ -50,6 +62,6 @@ export const recipe = defineType({
     }),
   ],
   preview: {
-    select: { title: "title", subtitle: "category" },
+    select: { title: "title", subtitle: "category", media: "image" },
   },
 });

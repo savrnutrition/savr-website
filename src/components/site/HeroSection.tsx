@@ -1,8 +1,12 @@
 import Image from "next/image";
-import type { SiteSettings } from "@/lib/content/types";
+import type { Flavour, SiteSettings } from "@/lib/content/types";
 import { TOMATO_ALLERGENS, TOMATO_INGREDIENTS, TOMATO_NUTRITION, TOMATO_STORAGE } from "@/lib/content/defaults";
+import { urlForImage } from "@/sanity/image";
 
-export function HeroSection({ settings }: { settings: SiteSettings }) {
+export function HeroSection({ settings, flavours }: { settings: SiteSettings; flavours: Flavour[] }) {
+  const heroFlavour = flavours.find((f) => f.slug === "tomato-napoletana");
+  const heroImageUrl = urlForImage(heroFlavour?.image)?.width(480).height(600).url();
+
   return (
     <section className="mx-auto max-w-5xl px-6 pb-16 pt-14">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
@@ -26,7 +30,7 @@ export function HeroSection({ settings }: { settings: SiteSettings }) {
         </div>
         <div className="relative flex justify-center">
           <Image
-            src="/images/pouch-tomato.png"
+            src={heroImageUrl || "/images/pouch-tomato.png"}
             alt="SAVR Tomato Napoletana pouch"
             width={480}
             height={600}

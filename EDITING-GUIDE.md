@@ -9,19 +9,27 @@ filling in a form, the same way you'd edit an online document.
 Go to **[www.savrnutrition.co.za/studio](https://www.savrnutrition.co.za/studio)**
 and log in with your Sanity account.
 
-## 2. Find what you want to edit
+## 2. Two ways to edit
 
-On the left you'll see five sections:
+At the top of Studio there are two tabs: **Structure** and **Presentation**.
 
-- **Site Settings** — the price, homepage text, delivery descriptions, and footer/contact
-  details. There's only ever one of these — it's edited in place.
-- **Flavours** — Tomato Napoletana, Creamy Basil Pesto, Pepper Sauce (product info,
-  nutrition panel, ingredients).
-- **FAQ** — the questions and answers shown on the FAQ section.
-- **Founders** — team photos, names, and bios.
-- **Recipes** — not in use yet.
+- **Presentation** — shows the real website. Turn on the **Edit** toggle (top left),
+  then click directly on any text or photo on the page to edit it in place. This is
+  the easiest way to change existing text/images while seeing exactly what you're doing.
+- **Structure** — the classic list view. On the left you'll see five sections:
 
-Click any of them to open the list, then click an item to edit it.
+  - **Site Settings** — the price, homepage text, delivery descriptions, and
+    footer/contact details. There's only ever one of these — it's edited in place.
+  - **Flavours** — Tomato Napoletana, Creamy Basil Pesto, Pepper Sauce (product info,
+    nutrition panel, ingredients).
+  - **FAQ** — the questions and answers shown on the FAQ section.
+  - **Founders** — team photos, names, and bios.
+  - **Recipes** — title, photo, category, and the recipe itself. Each one gets its
+    own page automatically once published.
+
+  Use **Structure** for anything Presentation can't reach directly — mainly
+  **adding a brand new item** (a new FAQ, a new founder, a new recipe) or
+  **deleting one** (see below).
 
 ## 3. Make your change
 
@@ -36,7 +44,18 @@ Just type your change into the box.
 - **Dropdowns** (like a flavour's status, or a founder's position number) — just
   pick from the list.
 
-## 4. Publish
+## 4. Deleting something entirely
+
+To remove a whole FAQ, founder, flavour, or recipe (not just clear its text, but make
+it disappear completely):
+
+1. Go to the **Structure** tab (deleting isn't available from the Presentation view).
+2. Click into the relevant list (e.g. "FAQ"), then click the specific item you want gone.
+3. Click the **"⋯"** menu near the top-right of the document (next to Publish) →
+   **Delete**.
+4. Confirm. This is immediate and doesn't need a separate "Publish" step.
+
+## 5. Publish
 
 Click the **Publish** button (top right of the document you're editing). Your change
 goes live on the site automatically within about a minute — nobody needs to touch any

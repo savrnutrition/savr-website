@@ -37,13 +37,21 @@ export interface Founder {
   photo?: SanityImageRef;
 }
 
+export interface PortableTextBlock {
+  _key: string;
+  _type: string;
+  [key: string]: unknown;
+}
+
 export interface Recipe {
   _id: string;
   title: string;
+  slug: string;
+  excerpt?: string;
   category: string;
-  flavourRef?: string;
+  flavourName?: string;
   image?: SanityImageRef;
-  body?: string;
+  body?: PortableTextBlock[];
 }
 
 export interface FaqItem {
