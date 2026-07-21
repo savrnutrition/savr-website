@@ -6,10 +6,8 @@ export function ShopSection({ flavours, settings }: { flavours: Flavour[]; setti
   return (
     <section id="shop" className="scroll-mt-16 border-y border-line bg-white">
       <div className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="mb-2 font-display text-3xl font-bold">Shop</h2>
-        <p className="mb-10 font-body text-sm text-ink-soft">
-          Launching with Tomato Napoletana. Pesto and Pepper Sauce join once formulation is finalised.
-        </p>
+        <h2 className="mb-2 font-display text-3xl font-bold">{settings.shopHeading}</h2>
+        <p className="mb-10 font-body text-sm text-ink-soft">{settings.shopIntro}</p>
 
         <div className="mb-14 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {flavours.map((f) => {

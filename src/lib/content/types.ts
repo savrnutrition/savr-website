@@ -67,6 +67,11 @@ export interface WhyPoint {
   body: string;
 }
 
+export interface HeroStat {
+  label: string;
+  sub: string;
+}
+
 export interface DeliveryNote {
   method: "courierguy" | "paxi" | "collect";
   note: string;
@@ -75,11 +80,22 @@ export interface DeliveryNote {
 export interface SiteSettings {
   price: number;
   standardPrice: number;
+  heroEyebrow: string;
   heroHeadline: string;
   heroSubheadline: string;
+  heroCtaLabel: string;
+  heroStats: HeroStat[];
   aboutCopy: string[];
   howToUseSteps: string[];
+  shopHeading: string;
+  shopIntro: string;
+  recipesHeading: string;
+  recipesIntro: string;
+  whyHeading: string;
   whyPoints: WhyPoint[];
+  foundersHeading: string;
+  foundersIntro: string;
+  faqHeading: string;
   deliveryNotes: DeliveryNote[];
   footerText: string;
   contactEmail: string;

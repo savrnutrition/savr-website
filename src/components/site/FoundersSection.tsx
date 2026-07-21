@@ -3,13 +3,21 @@ import type { Founder } from "@/lib/content/types";
 import { urlForImage } from "@/sanity/image";
 import { TodoTag } from "@/components/ui/TodoTag";
 
-export function FoundersSection({ founders }: { founders: Founder[] }) {
+export function FoundersSection({
+  founders,
+  heading,
+  intro,
+}: {
+  founders: Founder[];
+  heading: string;
+  intro: string;
+}) {
   const filled = founders.filter((f) => (f.name ?? "").trim());
 
   if (!filled.length) {
     return (
       <section id="about" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
-        <h2 className="mb-2 font-display text-3xl font-bold">Meet the founders</h2>
+        <h2 className="mb-2 font-display text-3xl font-bold">{heading}</h2>
         <p className="font-body text-sm text-ink-soft">Founder photos, names, and bios coming soon.</p>
       </section>
     );
@@ -17,8 +25,8 @@ export function FoundersSection({ founders }: { founders: Founder[] }) {
 
   return (
     <section id="about" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
-      <h2 className="mb-2 font-display text-3xl font-bold">Meet the founders</h2>
-      <p className="mb-8 font-body text-sm text-ink-soft">Founder photos, names, and bios to be added by the team.</p>
+      <h2 className="mb-2 font-display text-3xl font-bold">{heading}</h2>
+      <p className="mb-8 font-body text-sm text-ink-soft">{intro}</p>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
         {filled.map((f) => {
           const photoUrl = urlForImage(f.photo)?.width(160).height(160).url();

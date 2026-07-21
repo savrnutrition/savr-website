@@ -18,15 +18,23 @@ const RECIPE_CATEGORIES = [
   "Quick Meals (under 15 min)",
 ];
 
-export function RecipesSection({ recipes }: { recipes: Recipe[] }) {
+export function RecipesSection({
+  recipes,
+  heading,
+  intro,
+}: {
+  recipes: Recipe[];
+  heading: string;
+  intro: string;
+}) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const usedCategories = RECIPE_CATEGORIES.filter((c) => recipes.some((r) => r.category === c));
   const visible = activeCategory ? recipes.filter((r) => r.category === activeCategory) : recipes;
 
   return (
     <section id="recipes" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
-      <h2 className="mb-2 font-display text-3xl font-bold">Recipes</h2>
-      <p className="mb-8 font-body text-sm text-ink-soft">Stir SAVR into what you&apos;re already cooking.</p>
+      <h2 className="mb-2 font-display text-3xl font-bold">{heading}</h2>
+      <p className="mb-8 font-body text-sm text-ink-soft">{intro}</p>
 
       {recipes.length > 0 && (
         <div className="mb-8 flex flex-wrap gap-3">

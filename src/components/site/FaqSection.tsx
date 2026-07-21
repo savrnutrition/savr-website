@@ -5,13 +5,13 @@ import { ChevronDown } from "lucide-react";
 import type { FaqItem } from "@/lib/content/types";
 import { TodoTag } from "@/components/ui/TodoTag";
 
-export function FaqSection({ faqs }: { faqs: FaqItem[] }) {
+export function FaqSection({ faqs, heading }: { faqs: FaqItem[]; heading: string }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <section id="faq" className="scroll-mt-16 border-y border-line bg-white">
       <div className="mx-auto max-w-5xl px-6 py-16">
-        <h2 className="mb-8 font-display text-3xl font-bold">FAQ</h2>
+        <h2 className="mb-8 font-display text-3xl font-bold">{heading}</h2>
         <div className="divide-y divide-line">
           {faqs.map((f, i) => (
             <div key={f._id} className="py-4">

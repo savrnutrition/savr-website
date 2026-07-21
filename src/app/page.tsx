@@ -28,10 +28,10 @@ export default async function HomePage() {
       <main>
         <HeroSection settings={settings} flavours={flavours} />
         <ShopSection flavours={flavours} settings={settings} />
-        <RecipesSection recipes={recipes} />
-        <WhySection points={settings.whyPoints} />
-        <FoundersSection founders={founders} />
-        <FaqSection faqs={faqs} />
+        <RecipesSection recipes={recipes} heading={settings.recipesHeading} intro={settings.recipesIntro} />
+        <WhySection points={settings.whyPoints} heading={settings.whyHeading} />
+        <FoundersSection founders={founders} heading={settings.foundersHeading} intro={settings.foundersIntro} />
+        <FaqSection faqs={faqs} heading={settings.faqHeading} />
         <ContactSection settings={settings} />
       </main>
       <Footer settings={settings} />

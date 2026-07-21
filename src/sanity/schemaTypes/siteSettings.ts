@@ -7,6 +7,7 @@ export const siteSettings = defineType({
   groups: [
     { name: "pricing", title: "Pricing", default: true },
     { name: "homepage", title: "Homepage copy" },
+    { name: "sections", title: "Section headings" },
     { name: "delivery", title: "Delivery" },
     { name: "footer", title: "Footer & Contact" },
   ],
@@ -30,6 +31,13 @@ export const siteSettings = defineType({
       initialValue: 349,
     }),
     defineField({
+      name: "heroEyebrow",
+      title: "Small label above the headline",
+      description: "e.g. \"Savoury protein · Tomato Napoletana\"",
+      type: "string",
+      group: "homepage",
+    }),
+    defineField({
       name: "heroHeadline",
       title: "Main headline",
       description: "The big bold title at the very top of the homepage.",
@@ -43,6 +51,31 @@ export const siteSettings = defineType({
       type: "text",
       rows: 3,
       group: "homepage",
+    }),
+    defineField({
+      name: "heroCtaLabel",
+      title: "Button text (below headline)",
+      description: "e.g. \"Shop Tomato Napoletana\" — the red button next to the price.",
+      type: "string",
+      group: "homepage",
+    }),
+    defineField({
+      name: "heroStats",
+      title: "Stat strip (the 4 boxes under the photo)",
+      description: "Each item is a bold number/label plus a smaller line underneath, e.g. \"20g protein\" / \"per 40g serving\".",
+      type: "array",
+      group: "homepage",
+      of: [
+        {
+          type: "object",
+          name: "heroStat",
+          fields: [
+            defineField({ name: "label", title: "Bold text", type: "string" }),
+            defineField({ name: "sub", title: "Smaller text underneath", type: "string" }),
+          ],
+          preview: { select: { title: "label", subtitle: "sub" } },
+        },
+      ],
     }),
     defineField({
       name: "aboutCopy",
@@ -78,6 +111,58 @@ export const siteSettings = defineType({
           preview: { select: { title: "title", subtitle: "body" } },
         },
       ],
+    }),
+    defineField({
+      name: "shopHeading",
+      title: "Shop section heading",
+      type: "string",
+      group: "sections",
+    }),
+    defineField({
+      name: "shopIntro",
+      title: "Shop section intro line",
+      type: "text",
+      rows: 2,
+      group: "sections",
+    }),
+    defineField({
+      name: "recipesHeading",
+      title: "Recipes section heading",
+      type: "string",
+      group: "sections",
+    }),
+    defineField({
+      name: "recipesIntro",
+      title: "Recipes section intro line",
+      type: "text",
+      rows: 2,
+      group: "sections",
+    }),
+    defineField({
+      name: "whyHeading",
+      title: "\"Why savoury?\" section heading",
+      type: "string",
+      group: "sections",
+    }),
+    defineField({
+      name: "foundersHeading",
+      title: "Founders section heading",
+      type: "string",
+      group: "sections",
+    }),
+    defineField({
+      name: "foundersIntro",
+      title: "Founders section intro line",
+      description: "Only shown once at least one founder has a name filled in.",
+      type: "text",
+      rows: 2,
+      group: "sections",
+    }),
+    defineField({
+      name: "faqHeading",
+      title: "FAQ section heading",
+      type: "string",
+      group: "sections",
     }),
     defineField({
       name: "deliveryNotes",

@@ -7,12 +7,19 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
   const heroFlavour = flavours.find((f) => f.slug === "tomato-napoletana");
   const heroImageUrl = urlForImage(heroFlavour?.image)?.width(480).height(600).url();
 
+  const nutrition = heroFlavour?.nutrition?.length ? heroFlavour.nutrition : TOMATO_NUTRITION;
+  const ingredients = heroFlavour?.ingredients || TOMATO_INGREDIENTS;
+  const allergens = heroFlavour?.allergens || TOMATO_ALLERGENS;
+  const storage = heroFlavour?.storage || TOMATO_STORAGE;
+  const servingSizeG = heroFlavour?.servingSizeG || 40;
+  const servingsPerContainer = heroFlavour?.servingsPerContainer || 13;
+
   return (
     <section className="mx-auto max-w-5xl px-6 pb-16 pt-14">
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
         <div>
           <p className="mb-3 font-body text-xs font-semibold uppercase tracking-[0.2em] text-tomato">
-            Savoury protein · Tomato Napoletana
+            {settings.heroEyebrow}
           </p>
           <h1 className="font-display text-5xl font-black leading-[1.03] tracking-tight md:text-6xl">
             {settings.heroHeadline}
@@ -23,7 +30,7 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
               href="#shop"
               className="rounded-full bg-tomato px-6 py-3 font-body text-base font-semibold text-white hover:bg-tomato-dark"
             >
-              Shop Tomato Napoletana
+              {settings.heroCtaLabel}
             </a>
             <span className="font-body text-lg font-semibold">R{settings.price}</span>
           </div>
@@ -41,10 +48,10 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
       </div>
 
       <div className="mt-14 grid grid-cols-2 gap-6 border-t border-line pt-10 sm:grid-cols-4">
-        {BENEFITS.map((b) => (
-          <div key={b.label}>
-            <p className="font-display text-xl font-bold text-tomato">{b.label}</p>
-            <p className="font-body text-xs text-ink-soft">{b.sub}</p>
+        {settings.heroStats.map((stat, i) => (
+          <div key={i}>
+            <p className="font-display text-xl font-bold text-tomato">{stat.label}</p>
+            <p className="font-body text-xs text-ink-soft">{stat.sub}</p>
           </div>
         ))}
       </div>
@@ -77,7 +84,9 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
           <p className="mb-1 font-body text-xs uppercase tracking-widest text-tan">
             Typical nutritional information
           </p>
-          <p className="mb-4 font-body text-xs text-tan">Serving size: 40g · Servings per container: 13</p>
+          <p className="mb-4 font-body text-xs text-tan">
+            Serving size: {servingSizeG}g · Servings per container: {servingsPerContainer}
+          </p>
           <table className="w-full font-body text-sm">
             <thead>
               <tr className="border-b border-[#4a443c]">
@@ -87,7 +96,7 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
               </tr>
             </thead>
             <tbody>
-              {TOMATO_NUTRITION.map((row) => (
+              {nutrition.map((row) => (
                 <tr key={row.label} className="border-b border-[#3a362e]">
                   <td className="py-1.5">{row.label}</td>
                   <td className="py-1.5 text-right">{row.per100g}</td>
@@ -99,20 +108,13 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
         </div>
         <div>
           <h3 className="mb-3 font-body text-lg font-semibold">Ingredients</h3>
-          <p className="mb-4 font-body text-sm text-ink-soft">{TOMATO_INGREDIENTS}</p>
+          <p className="mb-4 font-body text-sm text-ink-soft">{ingredients}</p>
           <h3 className="mb-2 mt-6 font-body text-lg font-semibold">Allergens</h3>
-          <p className="mb-4 font-body text-sm text-ink-soft">{TOMATO_ALLERGENS}</p>
+          <p className="mb-4 font-body text-sm text-ink-soft">{allergens}</p>
           <h3 className="mb-2 font-body text-lg font-semibold">Storage</h3>
-          <p className="font-body text-sm text-ink-soft">{TOMATO_STORAGE}</p>
+          <p className="font-body text-sm text-ink-soft">{storage}</p>
         </div>
       </div>
     </section>
   );
 }
-
-const BENEFITS = [
-  { label: "20g protein", sub: "per 40g serving" },
-  { label: "13 servings", sub: "per 500g pouch" },
-  { label: "445 kJ", sub: "per serving" },
-  { label: "Made for real meals", sub: "sauces, stews, curries, soups" },
-];

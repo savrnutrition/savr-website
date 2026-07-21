@@ -3,6 +3,7 @@ import type {
   FaqItem,
   Flavour,
   Founder,
+  HeroStat,
   NutritionRow,
   SiteSettings,
   WhyPoint,
@@ -182,12 +183,22 @@ export const DEFAULT_DELIVERY_NOTES: DeliveryNote[] = [
   { method: "collect", note: "Free — we'll be in touch to coordinate" },
 ];
 
+export const DEFAULT_HERO_STATS: HeroStat[] = [
+  { label: "20g protein", sub: "per 40g serving" },
+  { label: "13 servings", sub: "per 500g pouch" },
+  { label: "445 kJ", sub: "per serving" },
+  { label: "Made for real meals", sub: "sauces, stews, curries, soups" },
+];
+
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   price: 299,
   standardPrice: 349,
+  heroEyebrow: "Savoury protein · Tomato Napoletana",
   heroHeadline: "Protein for your plate, not your shaker.",
   heroSubheadline:
     "SAVR is a savoury protein powder you stir into rice, pasta, mince or sauce — 20g of protein added to a meal you're already cooking. No shaker, no sweetness, no fuss.",
+  heroCtaLabel: "Shop Tomato Napoletana",
+  heroStats: DEFAULT_HERO_STATS,
   aboutCopy: [
     "SAVR is a high-protein meal enhancer designed to effortlessly boost the protein content of your favourite dishes. Simply stir it into sauces, stews, curries, soups and more for a delicious protein boost, without compromising on flavour.",
     "Whether you're cooking for yourself or the whole family, SAVR makes hitting your protein goals simple, convenient and delicious.",
@@ -198,7 +209,15 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
     "Mix until smooth and heated through.",
     "Enjoy a protein-packed meal.",
   ],
+  shopHeading: "Shop",
+  shopIntro: "Launching with Tomato Napoletana. Pesto and Pepper Sauce join once formulation is finalised.",
+  recipesHeading: "Recipes",
+  recipesIntro: "Stir SAVR into what you're already cooking.",
+  whyHeading: "Why savoury?",
   whyPoints: DEFAULT_WHY_POINTS,
+  foundersHeading: "Meet the founders",
+  foundersIntro: "Founder photos, names, and bios to be added by the team.",
+  faqHeading: "FAQ",
   deliveryNotes: DEFAULT_DELIVERY_NOTES,
   footerText: "Proudly made in Cape Town, South Africa.",
   contactEmail: "savrnutrition@gmail.com",
