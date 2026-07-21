@@ -213,6 +213,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   shopIntro: "Launching with Tomato Napoletana. Pesto and Pepper Sauce join once formulation is finalised.",
   recipesHeading: "Recipes",
   recipesIntro: "Stir SAVR into what you're already cooking.",
+  recipesEmptyMessage: "Recipes coming soon.",
   whyHeading: "Why savoury?",
   whyPoints: DEFAULT_WHY_POINTS,
   foundersHeading: "Meet the founders",

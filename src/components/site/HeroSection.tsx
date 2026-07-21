@@ -1,11 +1,26 @@
 import Image from "next/image";
+import { createDataAttribute } from "next-sanity";
 import type { Flavour, SiteSettings } from "@/lib/content/types";
 import { TOMATO_ALLERGENS, TOMATO_INGREDIENTS, TOMATO_NUTRITION, TOMATO_STORAGE } from "@/lib/content/defaults";
 import { urlForImage } from "@/sanity/image";
+import { dataset, projectId } from "@/sanity/env";
 
 export function HeroSection({ settings, flavours }: { settings: SiteSettings; flavours: Flavour[] }) {
   const heroFlavour = flavours.find((f) => f.slug === "tomato-napoletana");
   const heroImageUrl = urlForImage(heroFlavour?.image)?.width(480).height(600).url();
+  // Image fields have no text content for stega to encode into, so the
+  // click-to-edit overlay needs this explicit marker to know which
+  // document/field the photo belongs to.
+  const heroImageAttr = heroFlavour
+    ? createDataAttribute({
+        projectId,
+        dataset,
+        baseUrl: "/studio",
+        id: heroFlavour._id,
+        type: "flavour",
+        path: "image",
+      })
+    : undefined;
 
   const nutrition = heroFlavour?.nutrition?.length ? heroFlavour.nutrition : TOMATO_NUTRITION;
   const ingredients = heroFlavour?.ingredients || TOMATO_INGREDIENTS;
@@ -37,6 +52,7 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
         </div>
         <div className="relative flex justify-center">
           <Image
+            data-sanity={heroImageAttr?.()}
             src={heroImageUrl || "/images/pouch-tomato.png"}
             alt="SAVR Tomato Napoletana pouch"
             width={480}

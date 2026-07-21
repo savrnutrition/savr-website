@@ -46,7 +46,7 @@ export interface PortableTextBlock {
 export interface Recipe {
   _id: string;
   title: string;
-  slug: string;
+  slug?: string;
   excerpt?: string;
   category: string;
   flavourName?: string;
@@ -91,6 +91,7 @@ export interface SiteSettings {
   shopIntro: string;
   recipesHeading: string;
   recipesIntro: string;
+  recipesEmptyMessage: string;
   whyHeading: string;
   whyPoints: WhyPoint[];
   foundersHeading: string;

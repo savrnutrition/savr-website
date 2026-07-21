@@ -139,6 +139,13 @@ export const siteSettings = defineType({
       group: "sections",
     }),
     defineField({
+      name: "recipesEmptyMessage",
+      title: "Recipes section message (shown until any recipe exists)",
+      description: "e.g. \"Recipes coming soon.\" — disappears automatically once at least one recipe is published.",
+      type: "string",
+      group: "sections",
+    }),
+    defineField({
       name: "whyHeading",
       title: "\"Why savoury?\" section heading",
       type: "string",

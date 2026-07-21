@@ -14,7 +14,11 @@ const FLAVOURS_QUERY = `*[_type == "flavour"] | order(select(status == "availabl
 const FOUNDERS_QUERY = `*[_type == "founder"] | order(order asc)`;
 const FAQS_QUERY = `*[_type == "faqItem"] | order(order asc)`;
 const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category, image, body, "flavourName": flavour->name }`;
-const RECIPES_QUERY = `*[_type == "recipe" && defined(slug.current)] | order(title asc) ${RECIPE_PROJECTION}`;
+// Deliberately doesn't require a slug to exist — a recipe published
+// without one (e.g. the editor never clicked "Generate") should still
+// show up as a card rather than silently vanish; the card just won't
+// link anywhere until a slug is set. See RecipesSection.
+const RECIPES_QUERY = `*[_type == "recipe"] | order(title asc) ${RECIPE_PROJECTION}`;
 const RECIPE_BY_SLUG_QUERY = `*[_type == "recipe" && slug.current == $slug][0] ${RECIPE_PROJECTION}`;
 
 // Every fetch* helper degrades to the tech-spec-sourced defaults (see
