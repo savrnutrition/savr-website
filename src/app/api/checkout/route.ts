@@ -5,25 +5,44 @@ import { createYocoCheckout } from "@/lib/yoco";
 import { getShippingQuote } from "@/lib/courierguy";
 import { getDeliveryMethod } from "@/lib/orders/deliveryMethods";
 import { fetchSiteSettings } from "@/lib/sanity/fetchContent";
+import { readBoundedJson } from "@/lib/security/readJsonBody";
+import { checkRateLimit, getClientIp } from "@/lib/security/rateLimit";
 import type { OrderPayload } from "@/lib/orders/types";
 
 const CheckoutRequestSchema = z.object({
   quantity: z.number().int().min(1).max(50),
   deliveryMethod: z.enum(["courierguy", "paxi", "collect"]),
-  flavourSlug: z.string().default("tomato-napoletana"),
+  flavourSlug: z.string().max(100).default("tomato-napoletana"),
   customer: z.object({
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    email: z.string().email(),
-    phone: z.string().min(6),
-    street: z.string().min(1),
-    city: z.string().min(1),
-    postal: z.string().min(1),
+    firstName: z.string().min(1).max(100),
+    lastName: z.string().min(1).max(100),
+    email: z.string().email().max(254),
+    phone: z.string().min(6).max(20),
+    street: z.string().min(1).max(200),
+    city: z.string().min(1).max(100),
+    postal: z.string().min(1).max(20),
   }),
 });
 
 export async function POST(request: NextRequest) {
-  const parsed = CheckoutRequestSchema.safeParse(await request.json());
+  const ip = getClientIp(request);
+  const { allowed, retryAfterSeconds } = checkRateLimit(`checkout:${ip}`, 5, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests — please try again later." },
+      { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }
+    );
+  }
+
+  const body = await readBoundedJson(request);
+  if (!body.ok) {
+    return NextResponse.json(
+      { error: body.error === "too_large" ? "Request body too large" : "Invalid JSON" },
+      { status: 400 }
+    );
+  }
+
+  const parsed = CheckoutRequestSchema.safeParse(body.data);
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid request", issues: parsed.error.issues }, { status: 400 });
   }

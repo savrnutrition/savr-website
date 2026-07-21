@@ -1,15 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
+import { escapeHtml } from "@/lib/security/html";
+import { readBoundedJson } from "@/lib/security/readJsonBody";
+import { checkRateLimit, getClientIp } from "@/lib/security/rateLimit";
 
 const ContactRequestSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(),
+  name: z.string().min(1).max(100),
+  email: z.string().email().max(254),
   message: z.string().min(1).max(5000),
 });
 
 export async function POST(request: NextRequest) {
-  const parsed = ContactRequestSchema.safeParse(await request.json());
+  const ip = getClientIp(request);
+  const { allowed, retryAfterSeconds } = checkRateLimit(`contact:${ip}`, 5, 15 * 60 * 1000);
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "Too many requests — please try again later." },
+      { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }
+    );
+  }
+
+  const body = await readBoundedJson(request);
+  if (!body.ok) {
+    return NextResponse.json(
+      { error: body.error === "too_large" ? "Request body too large" : "Invalid JSON" },
+      { status: 400 }
+    );
+  }
+
+  const parsed = ContactRequestSchema.safeParse(body.data);
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid request", issues: parsed.error.issues }, { status: 400 });
   }
@@ -32,7 +52,7 @@ export async function POST(request: NextRequest) {
       to: teamInbox,
       replyTo: email,
       subject: `Website contact form — ${name}`,
-      html: `<p><strong>${name}</strong> (${email}) wrote:</p><p>${message.replace(/\n/g, "<br/>")}</p>`,
+      html: `<p><strong>${escapeHtml(name)}</strong> (${escapeHtml(email)}) wrote:</p><p>${escapeHtml(message).replace(/\n/g, "<br/>")}</p>`,
     });
     return NextResponse.json({ sent: true });
   } catch (err) {

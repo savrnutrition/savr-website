@@ -8,8 +8,13 @@ import type { OrderPayload } from "@/lib/orders/types";
 // Payment confirmation must come from this webhook, not the successUrl
 // redirect (a customer can close the tab before the redirect fires, or
 // hit the success page without ever having paid).
+const MAX_BODY_BYTES = 100_000;
+
 export async function POST(request: NextRequest) {
   const rawBody = await request.text();
+  if (Buffer.byteLength(rawBody, "utf8") > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Request body too large" }, { status: 400 });
+  }
   const webhookId = request.headers.get("webhook-id");
   const webhookTimestamp = request.headers.get("webhook-timestamp");
   const webhookSignature = request.headers.get("webhook-signature");
@@ -34,7 +39,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
   }
 
-  const event = JSON.parse(rawBody);
+  let event: Record<string, any>;
+  try {
+    event = JSON.parse(rawBody);
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
   // ⚠️ Confirm this event shape against a real sandbox webhook delivery —
   // Yoco's docs site couldn't be fully scraped while building this. Log the
@@ -53,7 +63,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Missing order metadata" }, { status: 400 });
   }
 
-  const order: OrderPayload = JSON.parse(orderJson);
+  let order: OrderPayload;
+  try {
+    order = JSON.parse(orderJson);
+  } catch {
+    console.error("Yoco webhook order metadata is not valid JSON");
+    return NextResponse.json({ error: "Malformed order metadata" }, { status: 400 });
+  }
 
   const results = await Promise.allSettled([
     appendOrderRow(order),

@@ -34,7 +34,12 @@ export async function appendOrderRow(order: OrderPayload) {
   await sheets.spreadsheets.values.append({
     spreadsheetId: sheetId,
     range: "Orders!A:K",
-    valueInputOption: "USER_ENTERED",
+    // RAW (not USER_ENTERED) so customer-supplied text is stored as inert
+    // text — USER_ENTERED parses cells as if typed into the UI, so a name
+    // like `=HYPERLINK("http://evil.com")` would become a live formula
+    // (classic spreadsheet formula injection). RAW also means phone numbers
+    // keep their leading zero without needing a manual apostrophe prefix.
+    valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
     requestBody: {
       values: [
@@ -42,7 +47,7 @@ export async function appendOrderRow(order: OrderPayload) {
           order.orderId,
           `${order.customer.firstName} ${order.customer.lastName}`,
           order.customer.email,
-          `'${order.customer.phone}`,
+          order.customer.phone,
           `${order.customer.street}, ${order.customer.city} ${order.customer.postal}`,
           order.quantity,
           deliveryLabel,
