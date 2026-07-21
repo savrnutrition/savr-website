@@ -32,7 +32,11 @@ async function getClient() {
       token: readToken,
       perspective: "drafts",
       useCdn: false,
-      stega: { studioUrl: "/studio" },
+      // enabled must be forced on explicitly — the client defaults this to
+      // off in production to avoid leaking stega markers to real visitors.
+      // Safe here since this whole branch only runs when draft mode (i.e.
+      // Studio's Presentation preview) is already active.
+      stega: { studioUrl: "/studio", enabled: true },
     });
   }
   return sanityClient;
