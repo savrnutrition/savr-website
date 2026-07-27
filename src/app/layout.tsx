@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SAVR — Savoury Protein Powder",
     description:
-      "Protein for your plate, not your shaker. 20g protein per 40g serving.",
+      "Protein for your plate, not your shaker. 20g protein per 30g serving.",
     siteName: "SAVR Nutrition",
     locale: "en_ZA",
     type: "website",

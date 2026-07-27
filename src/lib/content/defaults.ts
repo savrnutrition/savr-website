@@ -18,13 +18,14 @@ import type {
  */
 
 export const TOMATO_NUTRITION: NutritionRow[] = [
-  { label: "Energy", per100g: "1113 kJ", perServing: "445 kJ" },
-  { label: "Protein", per100g: "50 g", perServing: "20 g" },
-  { label: "Carbohydrate", per100g: "38 g", perServing: "15 g" },
-  { label: "— of which sugar", per100g: "<1 g", perServing: "0 g" },
-  { label: "Total fat", per100g: "6 g", perServing: "2 g" },
-  { label: "— of which saturated", per100g: "2 g", perServing: "1 g" },
-  { label: "Dietary fibre", per100g: "6 g", perServing: "3 g" },
+  { label: "Energy (KJ)", per100g: "1520 kJ", perServing: "456 kJ" },
+  { label: "Protein", per100g: "67 g", perServing: "20 g" },
+  { label: "Glycaemic Carbohydrate", per100g: "27 g", perServing: "8 g" },
+  { label: "— of which total sugar", per100g: "2 g", perServing: "0,5 g" },
+  { label: "Total Fat", per100g: "7 g", perServing: "2 g" },
+  { label: "— of which saturated fat", per100g: "3 g", perServing: "1 g" },
+  { label: "Dietary Fibre", per100g: "7 g", perServing: "2 g" },
+  { label: "Minerals", per100g: "", perServing: "" },
   { label: "Sodium", per100g: "364 mg", perServing: "146 mg" },
   { label: "Potassium", per100g: "290 mg", perServing: "116 mg" },
   { label: "Iron", per100g: "7 mg", perServing: "3 mg" },
@@ -55,8 +56,8 @@ export const DEFAULT_FLAVOURS: Flavour[] = [
     colorway: "tomato",
     shortDescription:
       "Our launch flavour — a rich, real tomato base that disappears straight into mince, pasta sauce, or rice.",
-    servingSizeG: 40,
-    servingsPerContainer: 13,
+    servingSizeG: 30,
+    servingsPerContainer: 17,
     nutrition: TOMATO_NUTRITION,
     ingredients: TOMATO_INGREDIENTS,
     allergens: TOMATO_ALLERGENS,
@@ -126,7 +127,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
   {
     _id: "faq-2",
     question: "How much protein is in each serving?",
-    answer: "20g of protein per 40g serving (445 kJ per serving).",
+    answer: "20g of protein per 30g serving (456 kJ per serving).",
   },
   {
     _id: "faq-3",
@@ -168,7 +169,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
   {
     _id: "faq-9",
     question: "How many servings are in a pouch?",
-    answer: "Each 500g pouch contains 13 servings of 40g each.",
+    answer: "Each 500g pouch contains 17 servings of 30g each.",
   },
   {
     _id: "faq-10",
@@ -184,8 +185,8 @@ export const DEFAULT_DELIVERY_NOTES: DeliveryNote[] = [
 ];
 
 export const DEFAULT_HERO_STATS: HeroStat[] = [
-  { label: "20g protein", sub: "per 40g serving" },
-  { label: "13 servings", sub: "per 500g pouch" },
+  { label: "20g protein", sub: "per 30g serving" },
+  { label: "17 servings", sub: "per 500g pouch" },
   { label: "445 kJ", sub: "per serving" },
   { label: "Made for real meals", sub: "sauces, stews, curries, soups" },
 ];
@@ -205,7 +206,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   ],
   howToUseSteps: [
     "Prepare your favourite sauce, stew, soup or curry.",
-    "Stir in 1 serving (40g) of SAVR.",
+    "Stir in 1 serving (30g) of SAVR.",
     "Mix until smooth and heated through.",
     "Enjoy a protein-packed meal.",
   ],

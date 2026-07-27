@@ -62,7 +62,7 @@ export const siteSettings = defineType({
     defineField({
       name: "heroStats",
       title: "Stat strip (the 4 boxes under the photo)",
-      description: "Each item is a bold number/label plus a smaller line underneath, e.g. \"20g protein\" / \"per 40g serving\".",
+      description: "Each item is a bold number/label plus a smaller line underneath, e.g. \"20g protein\" / \"per 30g serving\".",
       type: "array",
       group: "homepage",
       of: [

@@ -26,8 +26,8 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
   const ingredients = heroFlavour?.ingredients || TOMATO_INGREDIENTS;
   const allergens = heroFlavour?.allergens || TOMATO_ALLERGENS;
   const storage = heroFlavour?.storage || TOMATO_STORAGE;
-  const servingSizeG = heroFlavour?.servingSizeG || 40;
-  const servingsPerContainer = heroFlavour?.servingsPerContainer || 13;
+  const servingSizeG = heroFlavour?.servingSizeG || 30;
+  const servingsPerContainer = heroFlavour?.servingsPerContainer || 17;
 
   return (
     <section className="mx-auto max-w-5xl px-6 pb-16 pt-14">
