@@ -10,7 +10,11 @@ import {
 import type { FaqItem, Flavour, Founder, Recipe, SiteSettings } from "@/lib/content/types";
 
 const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
-const FLAVOURS_QUERY = `*[_type == "flavour"] | order(select(status == "available" => 0, 1) asc, name asc)`;
+// "slug" must be flattened to a plain string ({ ..., "slug": slug.current })
+// — Sanity's slug field is really { _type: "slug", current: "..." }, and an
+// unprojected fetch returns that object, silently breaking any code that
+// compares flavour.slug against a string (e.g. finding the hero flavour).
+const FLAVOURS_QUERY = `*[_type == "flavour"] | order(select(status == "available" => 0, 1) asc, name asc) { ..., "slug": slug.current }`;
 const FOUNDERS_QUERY = `*[_type == "founder"] | order(order asc)`;
 const FAQS_QUERY = `*[_type == "faqItem"] | order(order asc)`;
 const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category, image, body, "flavourName": flavour->name }`;
