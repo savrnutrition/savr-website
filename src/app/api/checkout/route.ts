@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
       amountRand: total,
       orderId,
       lineItems: [
-        { displayName: "SAVR Tomato Napoletana (500g)", quantity, priceRand: unitPrice },
+        { displayName: "SAVR Tomato Napoletana (510g)", quantity, priceRand: unitPrice },
         { displayName: `Delivery — ${deliveryMeta.label}`, quantity: 1, priceRand: deliveryFee },
       ],
       successUrl: `${siteUrl}/order/success?orderId=${orderId}`,

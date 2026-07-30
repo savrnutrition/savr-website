@@ -126,7 +126,7 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
   return (
     <div className="grid grid-cols-1 gap-10 rounded-2xl border border-line p-6 md:grid-cols-5">
       <div className="md:col-span-3">
-        <p className="mb-4 font-body font-semibold">SAVR Tomato Napoletana · 500g</p>
+        <p className="mb-4 font-body font-semibold">SAVR Tomato Napoletana · 510g</p>
         <div className="mb-6">
           <p className="mb-2 font-body text-sm font-medium">Quantity</p>
           <div className="flex w-fit items-center gap-3 rounded-full border border-line px-3 py-2">

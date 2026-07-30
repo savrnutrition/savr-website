@@ -51,7 +51,7 @@ export async function sendCustomerOrderConfirmation(order: OrderPayload) {
     html: `
       <h2>Thanks, ${escapeHtml(c.firstName)} — your order is confirmed</h2>
       <p>Order reference: <strong>${escapeHtml(order.orderId)}</strong></p>
-      <p>${order.quantity} × SAVR Tomato Napoletana (500g)</p>
+      <p>${order.quantity} × SAVR Tomato Napoletana (510g)</p>
       <p>Delivery method: ${escapeHtml(deliveryLabel)}</p>
       <p>Total paid: R${order.total}</p>
       <p>Delivering to: ${escapeHtml(c.street)}, ${escapeHtml(c.city)} ${escapeHtml(c.postal)}</p>

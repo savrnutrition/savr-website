@@ -43,7 +43,7 @@ export default async function TermsPage() {
           <section>
             <h2 className="mb-2 font-display text-lg font-semibold text-ink">2. Products and pricing</h2>
             <p>
-              We sell savoury protein powder products, currently SAVR Tomato Napoletana (500g). Prices are listed
+              We sell savoury protein powder products, currently SAVR Tomato Napoletana (510g). Prices are listed
               in South African Rand (ZAR) and include VAT where applicable. We reserve the right to change prices,
               product descriptions, and availability at any time without prior notice; the price shown at checkout
               is the price you will be charged.

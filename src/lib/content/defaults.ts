@@ -169,7 +169,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
   {
     _id: "faq-9",
     question: "How many servings are in a pouch?",
-    answer: "Each 500g pouch contains 17 servings of 30g each.",
+    answer: "Each 510g pouch contains 17 servings of 30g each.",
   },
   {
     _id: "faq-10",
@@ -186,7 +186,7 @@ export const DEFAULT_DELIVERY_NOTES: DeliveryNote[] = [
 
 export const DEFAULT_HERO_STATS: HeroStat[] = [
   { label: "20g protein", sub: "per 30g serving" },
-  { label: "17 servings", sub: "per 500g pouch" },
+  { label: "17 servings", sub: "per 510g pouch" },
   { label: "445 kJ", sub: "per serving" },
   { label: "Made for real meals", sub: "sauces, stews, curries, soups" },
 ];
