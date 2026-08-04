@@ -39,6 +39,41 @@ export async function sendTeamOrderNotification(order: OrderPayload) {
   });
 }
 
+/**
+ * Best-effort alert for checkout attempts that failed before ever reaching
+ * Yoco (rate limited, shipping quote failed, checkout creation failed).
+ * Exists because Vercel's free tier only keeps logs briefly and doesn't
+ * support historical search — without this, "a customer said it failed at
+ * 21:16" is undiagnosable after the fact. Never throws: a failed alert
+ * should never break the actual response the customer sees.
+ */
+export async function alertCheckoutFailure(params: {
+  reason: string;
+  ip: string;
+  detail?: string;
+  customerEmail?: string;
+}) {
+  if (!TEAM_INBOX || !process.env.RESEND_API_KEY) return;
+  try {
+    const resend = getResendClient();
+    await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: TEAM_INBOX,
+      subject: `Checkout failed — ${params.reason}`,
+      html: `
+        <h2>A checkout attempt failed before reaching Yoco</h2>
+        <p><strong>Time:</strong> ${escapeHtml(new Date().toISOString())}</p>
+        <p><strong>Reason:</strong> ${escapeHtml(params.reason)}</p>
+        <p><strong>IP:</strong> ${escapeHtml(params.ip)}</p>
+        ${params.customerEmail ? `<p><strong>Customer email (if provided):</strong> ${escapeHtml(params.customerEmail)}</p>` : ""}
+        ${params.detail ? `<p><strong>Detail:</strong> ${escapeHtml(params.detail)}</p>` : ""}
+      `,
+    });
+  } catch (err) {
+    console.error("alertCheckoutFailure: failed to send alert email", err);
+  }
+}
+
 export async function sendCustomerOrderConfirmation(order: OrderPayload) {
   const deliveryLabel = getDeliveryMethod(order.deliveryMethod)?.label ?? order.deliveryMethod;
   const resend = getResendClient();

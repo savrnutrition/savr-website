@@ -7,6 +7,7 @@ import { getDeliveryMethod } from "@/lib/orders/deliveryMethods";
 import { fetchSiteSettings } from "@/lib/sanity/fetchContent";
 import { readBoundedJson } from "@/lib/security/readJsonBody";
 import { checkRateLimit, getClientIp } from "@/lib/security/rateLimit";
+import { alertCheckoutFailure } from "@/lib/email";
 import type { OrderPayload } from "@/lib/orders/types";
 
 const CheckoutRequestSchema = z.object({
@@ -28,6 +29,7 @@ export async function POST(request: NextRequest) {
   const ip = getClientIp(request);
   const { allowed, retryAfterSeconds } = checkRateLimit(`checkout:${ip}`, 5, 15 * 60 * 1000);
   if (!allowed) {
+    await alertCheckoutFailure({ reason: "Rate limited", ip });
     return NextResponse.json(
       { error: "Too many requests — please try again later." },
       { status: 429, headers: { "Retry-After": String(retryAfterSeconds) } }
@@ -71,6 +73,12 @@ export async function POST(request: NextRequest) {
       deliveryFee = Math.min(...rates.map((r) => r.totalCharge));
     } catch (err) {
       console.error("Courier Guy re-quote failed at checkout", err);
+      await alertCheckoutFailure({
+        reason: "Courier Guy re-quote failed",
+        ip,
+        detail: err instanceof Error ? err.message : String(err),
+        customerEmail: customer.email,
+      });
       return NextResponse.json(
         { error: "Could not get a Courier Guy shipping rate for this address. Try PAXI or Cape Town collection." },
         { status: 502 }
@@ -117,6 +125,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ redirectUrl: checkout.redirectUrl, orderId });
   } catch (err) {
     console.error("Yoco checkout creation failed", err);
+    await alertCheckoutFailure({
+      reason: "Yoco checkout creation failed",
+      ip,
+      detail: err instanceof Error ? err.message : String(err),
+      customerEmail: customer.email,
+    });
     return NextResponse.json(
       { error: "Could not start payment — check YOCO_SECRET_KEY is set to a valid test/live key" },
       { status: 502 }
