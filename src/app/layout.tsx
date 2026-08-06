@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Playfair_Display, Inter } from "next/font/google";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing/client-component";
+import Script from "next/script";
 import "./globals.css";
 
 // FONT SWAP: replace these next/font/google calls with next/font/local once
@@ -87,6 +88,18 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-paper text-ink">
         {children}
         {isDraftMode && <VisualEditing />}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YDXJ147K5K"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-YDXJ147K5K');
+          `}
+        </Script>
       </body>
     </html>
   );
