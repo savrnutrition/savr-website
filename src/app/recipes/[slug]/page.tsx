@@ -43,10 +43,24 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
     image: photoUrl ?? `${SITE_URL}/images/pouch-tomato.png`,
     author: { "@type": "Organization", name: "SAVR Nutrition" },
     recipeCategory: recipe.category ?? "Main Course",
+    recipeCuisine: recipe.recipeCuisine ?? "South African",
     keywords: `SAVR, savoury protein powder, high protein, ${recipe.title}`,
+    ...(recipe.prepTime ? { prepTime: `PT${recipe.prepTime}M` } : {}),
+    ...(recipe.cookTime ? { cookTime: `PT${recipe.cookTime}M` } : {}),
+    ...(recipe.recipeYield ? { recipeYield: recipe.recipeYield } : {}),
+    ...(recipe.recipeIngredient?.length ? { recipeIngredient: recipe.recipeIngredient } : {}),
+    ...(recipe.recipeInstructions?.length
+      ? {
+          recipeInstructions: recipe.recipeInstructions.map((text) => ({
+            "@type": "HowToStep",
+            text,
+          })),
+        }
+      : {}),
     nutrition: {
       "@type": "NutritionInformation",
       proteinContent: "20g per serving of SAVR",
+      ...(recipe.calories ? { calories: recipe.calories } : {}),
     },
   };
 

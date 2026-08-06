@@ -17,7 +17,7 @@ const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
 const FLAVOURS_QUERY = `*[_type == "flavour"] | order(select(status == "available" => 0, 1) asc, name asc) { ..., "slug": slug.current }`;
 const FOUNDERS_QUERY = `*[_type == "founder"] | order(order asc)`;
 const FAQS_QUERY = `*[_type == "faqItem"] | order(order asc)`;
-const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category, image, body, "flavourName": flavour->name }`;
+const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category, image, body, "flavourName": flavour->name, prepTime, cookTime, recipeYield, recipeCuisine, calories, recipeIngredient, recipeInstructions }`;
 // Deliberately doesn't require a slug to exist — a recipe published
 // without one (e.g. the editor never clicked "Generate") should still
 // show up as a card rather than silently vanish; the card just won't

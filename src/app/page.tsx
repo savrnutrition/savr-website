@@ -47,6 +47,9 @@ const productSchema = {
   name: "SAVR Tomato Napoletana Savoury Protein Powder",
   description:
     "South Africa's first savoury protein powder. Stir into pasta, curries and stews for 20g protein per serving.",
+  image: [
+    "https://cdn.sanity.io/images/82tcxo47/production/6940c0e1c4d88f59214bb591ad8a95b8d318ac39-1122x1402.jpg",
+  ],
   brand: { "@type": "Brand", name: "SAVR Nutrition" },
   offers: {
     "@type": "Offer",
@@ -54,6 +57,45 @@ const productSchema = {
     price: "299",
     availability: "https://schema.org/InStock",
     url: `${SITE_URL}/#shop`,
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingRate: {
+        "@type": "MonetaryAmount",
+        currency: "ZAR",
+      },
+      shippingDestination: {
+        "@type": "DefinedRegion",
+        addressCountry: "ZA",
+      },
+      deliveryTime: {
+        "@type": "ShippingDeliveryTime",
+        businessDays: {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        },
+        cutoffTime: "12:00:00Z",
+        handlingTime: {
+          "@type": "QuantitativeValue",
+          minValue: 1,
+          maxValue: 2,
+          unitCode: "DAY",
+        },
+        transitTime: {
+          "@type": "QuantitativeValue",
+          minValue: 2,
+          maxValue: 5,
+          unitCode: "DAY",
+        },
+      },
+    },
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: "ZA",
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 30,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn",
+    },
   },
   nutrition: {
     "@type": "NutritionInformation",
