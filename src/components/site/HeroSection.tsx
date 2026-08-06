@@ -58,6 +58,7 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
             width={480}
             height={600}
             className="w-full max-w-sm rounded-2xl"
+            sizes="(min-width: 768px) 480px, 100vw"
             priority
           />
         </div>
