@@ -7,8 +7,6 @@ import { fetchRecipeBySlug, fetchSiteSettings } from "@/lib/sanity/fetchContent"
 import { urlForImage } from "@/sanity/image";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
-import type { PortableTextBlock } from "@/lib/content/types";
-
 export const revalidate = 60;
 
 export async function generateMetadata({
@@ -28,67 +26,6 @@ export async function generateMetadata({
 
 const SITE_URL = "https://www.savrnutrition.co.za";
 
-function portableTextToPlainText(blocks: PortableTextBlock[] | undefined): string {
-  if (!blocks?.length) return "";
-  return blocks
-    .map((block) => {
-      if (block._type !== "block") return "";
-      const children = (block.children as Array<{ _type: string; text?: string }>) || [];
-      return children
-        .filter((child) => child._type === "span")
-        .map((child) => child.text ?? "")
-        .join("");
-    })
-    .filter(Boolean)
-    .join("\n\n");
-}
-
-interface ExtractedRecipeData {
-  prepTime?: string | null;
-  cookTime?: string | null;
-  recipeYield?: string | null;
-  recipeCuisine?: string | null;
-  calories?: string | null;
-  recipeIngredient?: string[] | null;
-  recipeInstructions?: string[] | null;
-}
-
-async function extractRecipeSchema(
-  body: PortableTextBlock[] | undefined,
-  recipeName: string,
-): Promise<ExtractedRecipeData | null> {
-  try {
-    const plainText = portableTextToPlainText(body);
-    if (!plainText) return null;
-
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": process.env.ANTHROPIC_API_KEY ?? "",
-        "anthropic-version": "2023-06-01",
-      },
-      next: { revalidate: 86400 },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        messages: [
-          {
-            role: "user",
-            content: `Extract structured recipe data from this recipe text and return ONLY valid JSON, no markdown, no explanation:\n\n${plainText}\n\nReturn this exact JSON structure (use null for any field you cannot find):\n{\n  "prepTime": "PT10M",\n  "cookTime": "PT30M",\n  "recipeYield": "4 servings",\n  "recipeCuisine": "South African",\n  "calories": "450 kcal",\n  "recipeIngredient": ["200g beef mince", "1 onion, diced"],\n  "recipeInstructions": ["Heat oil in a pan", "Add onion and fry for 5 minutes"]\n}`,
-          },
-        ],
-      }),
-    });
-
-    const data = await response.json();
-    const text = data.content?.find((c: { type: string }) => c.type === "text")?.text || "{}";
-    return JSON.parse(text);
-  } catch {
-    return null;
-  }
-}
-
 export default async function RecipePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [recipe, settings] = await Promise.all([fetchRecipeBySlug(slug), fetchSiteSettings()]);
@@ -96,8 +33,6 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
   if (!recipe) notFound();
 
   const photoUrl = urlForImage(recipe.image)?.width(1200).height(800).url();
-
-  const extracted = await extractRecipeSchema(recipe.body, recipe.title);
 
   const recipeSchema = {
     "@context": "https://schema.org",
@@ -107,24 +42,11 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
     image: photoUrl ?? `${SITE_URL}/images/pouch-tomato.png`,
     author: { "@type": "Organization", name: "SAVR Nutrition" },
     recipeCategory: recipe.category ?? "Main Course",
-    recipeCuisine: extracted?.recipeCuisine ?? "South African",
+    recipeCuisine: "South African",
     keywords: `SAVR, savoury protein powder, high protein, ${recipe.title}`,
-    ...(extracted?.prepTime ? { prepTime: extracted.prepTime } : {}),
-    ...(extracted?.cookTime ? { cookTime: extracted.cookTime } : {}),
-    ...(extracted?.recipeYield ? { recipeYield: extracted.recipeYield } : {}),
-    ...(extracted?.recipeIngredient?.length ? { recipeIngredient: extracted.recipeIngredient } : {}),
-    ...(extracted?.recipeInstructions?.length
-      ? {
-          recipeInstructions: extracted.recipeInstructions.map((text) => ({
-            "@type": "HowToStep",
-            text,
-          })),
-        }
-      : {}),
     nutrition: {
       "@type": "NutritionInformation",
       proteinContent: "20g per serving of SAVR",
-      ...(extracted?.calories ? { calories: extracted.calories } : {}),
     },
   };
 
