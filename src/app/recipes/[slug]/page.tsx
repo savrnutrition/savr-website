@@ -21,8 +21,11 @@ export async function generateMetadata({
   return {
     title: `${recipe.title} — SAVR Nutrition`,
     description: recipe.excerpt,
+    alternates: { canonical: `/recipes/${slug}` },
   };
 }
+
+const SITE_URL = "https://www.savrnutrition.co.za";
 
 export default async function RecipePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -32,8 +35,27 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
 
   const photoUrl = urlForImage(recipe.image)?.width(1200).height(800).url();
 
+  const recipeSchema = {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    name: recipe.title,
+    description: recipe.excerpt ?? "",
+    image: photoUrl ?? `${SITE_URL}/images/pouch-tomato.png`,
+    author: { "@type": "Organization", name: "SAVR Nutrition" },
+    recipeCategory: recipe.category ?? "Main Course",
+    keywords: `SAVR, savoury protein powder, high protein, ${recipe.title}`,
+    nutrition: {
+      "@type": "NutritionInformation",
+      proteinContent: "20g per serving of SAVR",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(recipeSchema) }}
+      />
       <Header />
       <main className="mx-auto max-w-3xl px-6 py-16">
         <Link href="/#recipes" className="mb-8 inline-block font-body text-sm text-ink-soft hover:opacity-70">
@@ -56,7 +78,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
         {photoUrl && (
           <Image
             src={photoUrl}
-            alt={recipe.title}
+            alt={`${recipe.title} made with SAVR savoury protein powder`}
             width={1200}
             height={800}
             className="mb-8 w-full rounded-2xl object-cover"
@@ -71,6 +93,21 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
         ) : (
           <p className="font-body text-sm text-ink-soft">Full recipe coming soon.</p>
         )}
+
+        <div className="mt-12 rounded-2xl border border-line bg-white p-6 text-center">
+          <p className="mb-1 font-body text-xs font-semibold uppercase tracking-widest text-tomato">
+            Boost the protein in this recipe
+          </p>
+          <p className="mb-4 font-body text-sm text-ink-soft">
+            Stir one scoop of SAVR Tomato Napoletana into your sauce for an extra 20g of protein per serving — no shakes, no sweetness.
+          </p>
+          <Link
+            href="/#shop"
+            className="inline-block rounded-full bg-tomato px-6 py-3 font-body text-sm font-semibold text-white hover:bg-tomato-dark"
+          >
+            Try SAVR in this recipe →
+          </Link>
+        </div>
       </main>
       <Footer settings={settings} />
     </>

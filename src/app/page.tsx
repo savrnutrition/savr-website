@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { fetchFaqs, fetchFlavours, fetchFounders, fetchRecipes, fetchSiteSettings } from "@/lib/sanity/fetchContent";
 import { Header } from "@/components/site/Header";
 import { HeroSection } from "@/components/site/HeroSection";
@@ -9,9 +10,58 @@ import { FaqSection } from "@/components/site/FaqSection";
 import { ContactSection } from "@/components/site/ContactSection";
 import { Footer } from "@/components/site/Footer";
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 // Content is edited in Sanity Studio by non-technical team members — refetch
 // periodically so their changes go live without needing a redeploy.
 export const revalidate = 60;
+
+const SITE_URL = "https://www.savrnutrition.co.za";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "SAVR Nutrition",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo.png`,
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "savrnutrition@gmail.com",
+    contactType: "customer service",
+  },
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Lovers' Walk, Rondebosch",
+    addressLocality: "Cape Town",
+    postalCode: "7700",
+    addressCountry: "ZA",
+  },
+  sameAs: ["https://www.instagram.com/savr.nutrition"],
+};
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "SAVR Tomato Napoletana Savoury Protein Powder",
+  description:
+    "South Africa's first savoury protein powder. Stir into pasta, curries and stews for 20g protein per serving.",
+  brand: { "@type": "Brand", name: "SAVR Nutrition" },
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "ZAR",
+    price: "299",
+    availability: "https://schema.org/InStock",
+    url: `${SITE_URL}/#shop`,
+  },
+  nutrition: {
+    "@type": "NutritionInformation",
+    servingSize: "30g",
+    calories: "109 calories",
+    proteinContent: "20g",
+  },
+};
 
 export default async function HomePage() {
   const [settings, flavours, founders, faqs, recipes] = await Promise.all([
@@ -22,8 +72,32 @@ export default async function HomePage() {
     fetchRecipes(),
   ]);
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs
+      .filter((f) => !f.isTodo)
+      .map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: { "@type": "Answer", text: f.answer },
+      })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <Header />
       <main>
         <HeroSection settings={settings} flavours={flavours} />

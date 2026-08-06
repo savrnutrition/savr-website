@@ -54,7 +54,7 @@ export function HeroSection({ settings, flavours }: { settings: SiteSettings; fl
           <Image
             data-sanity={heroImageAttr?.()}
             src={heroImageUrl || "/images/pouch-tomato.png"}
-            alt="SAVR Tomato Napoletana pouch"
+            alt="SAVR Tomato Napoletana 510g savoury protein powder pouch"
             width={480}
             height={600}
             className="w-full max-w-sm rounded-2xl"

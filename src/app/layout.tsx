@@ -28,18 +28,47 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const SITE_URL = "https://www.savrnutrition.co.za";
+const OG_IMAGE = `${SITE_URL}/images/pouch-tomato.png`;
+
 export const metadata: Metadata = {
-  title: "SAVR — Savoury Protein Powder | Tomato Napoletana",
+  title: "SAVR Nutrition | South Africa's First Savoury Protein Powder",
   description:
-    "SAVR is a high-protein meal enhancer designed to effortlessly boost the protein content of your favourite dishes. Stir it into sauces, stews, curries and soups — 20g protein per serving.",
-  metadataBase: new URL("https://savrnutrition.co.za"),
+    "SAVR is South Africa's first savoury protein powder. Add 20g protein to pasta, curries & stews. No shakes, no sweet flavours. Pre-order now.",
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  verification: {
+    google: "REPLACE_WITH_YOUR_CODE",
+  },
   openGraph: {
-    title: "SAVR — Savoury Protein Powder",
+    title: "SAVR Nutrition | South Africa's First Savoury Protein Powder",
     description:
-      "Protein for your plate, not your shaker. 20g protein per 30g serving.",
+      "South Africa's first savoury protein powder. Add 20g protein to pasta, curries & stews. No shakes, no sweet flavours.",
     siteName: "SAVR Nutrition",
     locale: "en_ZA",
     type: "website",
+    url: SITE_URL,
+    images: [
+      {
+        url: OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "SAVR Tomato Napoletana 510g savoury protein powder pouch",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SAVR Nutrition | South Africa's First Savoury Protein Powder",
+    description:
+      "South Africa's first savoury protein powder. Add 20g protein to pasta, curries & stews.",
+    images: [OG_IMAGE],
   },
 };
 
