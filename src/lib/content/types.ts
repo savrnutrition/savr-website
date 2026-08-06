@@ -52,13 +52,6 @@ export interface Recipe {
   flavourName?: string;
   image?: SanityImageRef;
   body?: PortableTextBlock[];
-  prepTime?: number;
-  cookTime?: number;
-  recipeYield?: string;
-  recipeCuisine?: string;
-  calories?: string;
-  recipeIngredient?: string[];
-  recipeInstructions?: string[];
 }
 
 export interface FaqItem {
