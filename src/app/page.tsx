@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchFaqs, fetchFlavours, fetchFounders, fetchRecipes, fetchSiteSettings } from "@/lib/sanity/fetchContent";
+import { fetchFaqs, fetchFlavours, fetchFounders, fetchRecipes, fetchReviews, fetchSiteSettings } from "@/lib/sanity/fetchContent";
 import { Header } from "@/components/site/Header";
 import { HeroSection } from "@/components/site/HeroSection";
 import { ShopSection } from "@/components/site/ShopSection";
@@ -7,6 +7,7 @@ import { RecipesSection } from "@/components/site/RecipesSection";
 import { WhySection } from "@/components/site/WhySection";
 import { FoundersSection } from "@/components/site/FoundersSection";
 import { FaqSection } from "@/components/site/FaqSection";
+import { ReviewsSection } from "@/components/site/ReviewsSection";
 import { ContactSection } from "@/components/site/ContactSection";
 import { Footer } from "@/components/site/Footer";
 
@@ -106,12 +107,13 @@ const productSchema = {
 };
 
 export default async function HomePage() {
-  const [settings, flavours, founders, faqs, recipes] = await Promise.all([
+  const [settings, flavours, founders, faqs, recipes, reviews] = await Promise.all([
     fetchSiteSettings(),
     fetchFlavours(),
     fetchFounders(),
     fetchFaqs(),
     fetchRecipes(),
+    fetchReviews(),
   ]);
 
   const faqSchema = {
@@ -152,6 +154,7 @@ export default async function HomePage() {
         />
         <WhySection points={settings.whyPoints} heading={settings.whyHeading} />
         <FoundersSection founders={founders} heading={settings.foundersHeading} intro={settings.foundersIntro} />
+        <ReviewsSection reviews={reviews} />
         <FaqSection faqs={faqs} heading={settings.faqHeading} />
         <ContactSection settings={settings} />
       </main>

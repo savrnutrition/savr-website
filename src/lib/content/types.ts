@@ -54,6 +54,15 @@ export interface Recipe {
   body?: PortableTextBlock[];
 }
 
+export interface Review {
+  _id: string;
+  name: string;
+  role?: string;
+  quote: string;
+  rating?: number;
+  order?: number;
+}
+
 export interface FaqItem {
   _id: string;
   question: string;

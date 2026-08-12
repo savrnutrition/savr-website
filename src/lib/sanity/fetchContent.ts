@@ -7,7 +7,7 @@ import {
   DEFAULT_FOUNDERS,
   DEFAULT_SITE_SETTINGS,
 } from "@/lib/content/defaults";
-import type { FaqItem, Flavour, Founder, Recipe, SiteSettings } from "@/lib/content/types";
+import type { FaqItem, Flavour, Founder, Recipe, Review, SiteSettings } from "@/lib/content/types";
 
 const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]`;
 // "slug" must be flattened to a plain string ({ ..., "slug": slug.current })
@@ -24,6 +24,7 @@ const RECIPE_PROJECTION = `{ _id, title, "slug": slug.current, excerpt, category
 // link anywhere until a slug is set. See RecipesSection.
 const RECIPES_QUERY = `*[_type == "recipe"] | order(title asc) ${RECIPE_PROJECTION}`;
 const RECIPE_BY_SLUG_QUERY = `*[_type == "recipe" && slug.current == $slug][0] ${RECIPE_PROJECTION}`;
+const REVIEWS_QUERY = `*[_type == "review" && approved == true] | order(order asc) { _id, name, role, quote, rating, order }`;
 
 // Every fetch* helper degrades to the tech-spec-sourced defaults (see
 // src/lib/content/defaults.ts) whenever Sanity isn't configured yet, a
@@ -85,6 +86,12 @@ export async function fetchRecipes(): Promise<Recipe[]> {
   const client = await getClient();
   if (!client) return [];
   return (await client.fetch<Recipe[]>(RECIPES_QUERY)) ?? [];
+}
+
+export async function fetchReviews(): Promise<Review[]> {
+  const client = await getClient();
+  if (!client) return [];
+  return (await client.fetch<Review[]>(REVIEWS_QUERY)) ?? [];
 }
 
 export async function fetchRecipeBySlug(slug: string): Promise<Recipe | null> {
