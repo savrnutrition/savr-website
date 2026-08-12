@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     ...(role ? { role } : {}),
     quote,
     ...(rating != null ? { rating } : {}),
-    approved: false,
+    approved: true,
   });
 
   return NextResponse.json({ submitted: true });

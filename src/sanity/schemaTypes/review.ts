@@ -44,9 +44,9 @@ export const review = defineType({
     defineField({
       name: "approved",
       title: "Show on website",
-      description: "Tick this once the review is ready to go live. Unticked reviews are saved but never shown.",
+      description: "Reviews submitted from the site are shown automatically. Untick and publish to hide a review.",
       type: "boolean",
-      initialValue: false,
+      initialValue: true,
     }),
     defineField({
       name: "order",

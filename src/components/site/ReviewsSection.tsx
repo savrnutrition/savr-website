@@ -15,7 +15,7 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
     <section id="reviews" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
       {reviews.length > 0 && (
         <>
-          <h2 className="mb-8 font-display text-3xl font-bold">What investors are saying</h2>
+          <h2 className="mb-8 font-display text-3xl font-bold">Reviews</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {reviews.map((r) => (
               <figure
