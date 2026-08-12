@@ -15,3 +15,7 @@ export const isSanityConfigured = Boolean(projectId && dataset);
 // Read-only token used server-side only, to fetch draft (unpublished)
 // content for the live/visual preview. Never exposed to the browser.
 export const readToken = process.env.SANITY_API_READ_TOKEN;
+
+// Write token used only in API routes to create review submissions.
+// Never exposed to the browser. Set SANITY_API_WRITE_TOKEN in Vercel.
+export const writeToken = process.env.SANITY_API_WRITE_TOKEN;
