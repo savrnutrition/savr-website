@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchFaqs, fetchFlavours, fetchFounders, fetchRecipes, fetchReviews, fetchSiteSettings } from "@/lib/sanity/fetchContent";
+import { fetchFaqs, fetchFlavours, fetchRecipes, fetchReviews, fetchSiteSettings } from "@/lib/sanity/fetchContent";
 import { Header } from "@/components/site/Header";
 import { HeroSection } from "@/components/site/HeroSection";
 import { ShopSection } from "@/components/site/ShopSection";
@@ -107,10 +107,9 @@ const productSchema = {
 };
 
 export default async function HomePage() {
-  const [settings, flavours, founders, faqs, recipes, reviews] = await Promise.all([
+  const [settings, flavours, faqs, recipes, reviews] = await Promise.all([
     fetchSiteSettings(),
     fetchFlavours(),
-    fetchFounders(),
     fetchFaqs(),
     fetchRecipes(),
     fetchReviews(),
@@ -153,7 +152,7 @@ export default async function HomePage() {
           emptyMessage={settings.recipesEmptyMessage}
         />
         <WhySection points={settings.whyPoints} heading={settings.whyHeading} />
-        <FoundersSection founders={founders} heading={settings.foundersHeading} intro={settings.foundersIntro} />
+        <FoundersSection heading={settings.foundersHeading} />
         <ReviewsSection reviews={reviews} />
         <FaqSection faqs={faqs} heading={settings.faqHeading} />
         <ContactSection settings={settings} />

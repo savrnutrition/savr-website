@@ -1,60 +1,22 @@
 import Image from "next/image";
-import type { Founder } from "@/lib/content/types";
-import { urlForImage } from "@/sanity/image";
-import { TodoTag } from "@/components/ui/TodoTag";
 
-export function FoundersSection({
-  founders,
-  heading,
-  intro,
-}: {
-  founders: Founder[];
-  heading: string;
-  intro: string;
-}) {
-  const filled = founders.filter((f) => (f.name ?? "").trim());
+const TEAM_DESCRIPTION =
+  "Behind SAVR is a team of seven University of Cape Town entrepreneurship students with one shared goal: to rethink the way people consume protein. Each founder brought a unique perspective and skill set, allowing us to transform an overlooked market gap into South Africa's first savoury protein powder. A product designed to fit seamlessly into everyday meals, not around them.";
 
-  if (!filled.length) {
-    return (
-      <section id="about" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
-        <h2 className="mb-2 font-display text-3xl font-bold">{heading}</h2>
-        <p className="font-body text-sm text-ink-soft">Founder photos, names, and bios coming soon.</p>
-      </section>
-    );
-  }
-
+export function FoundersSection({ heading }: { heading: string }) {
   return (
     <section id="about" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
-      <h2 className="mb-2 font-display text-3xl font-bold">{heading}</h2>
-      <p className="mb-8 font-body text-sm text-ink-soft">{intro}</p>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {filled.map((f) => {
-          const photoUrl = urlForImage(f.photo)?.width(160).height(160).url();
-          return (
-            <div key={f._id} className="rounded-2xl border border-line p-5 text-center">
-              {photoUrl ? (
-                <Image
-                  src={photoUrl}
-                  alt={f.name}
-                  width={80}
-                  height={80}
-                  className="mx-auto mb-3 h-20 w-20 rounded-full object-cover"
-                />
-              ) : (
-                <div className="mx-auto mb-3 h-20 w-20 rounded-full bg-tan" />
-              )}
-              <p className="font-body text-sm font-semibold">{f.name}</p>
-              {(f.bio ?? "").startsWith("Bio —") ? (
-                <div className="mt-1">
-                  <TodoTag>{f.bio}</TodoTag>
-                </div>
-              ) : (
-                <p className="mt-1 font-body text-xs text-ink-soft">{f.bio}</p>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      <h2 className="mb-6 font-display text-3xl font-bold">{heading}</h2>
+      <Image
+        src="/images/team.jpg"
+        alt="The SAVR Nutrition team — seven UCT entrepreneurship students"
+        width={1200}
+        height={800}
+        className="w-full rounded-2xl object-cover"
+      />
+      <p className="mt-6 max-w-2xl font-body text-sm leading-relaxed text-ink-soft">
+        {TEAM_DESCRIPTION}
+      </p>
     </section>
   );
 }
