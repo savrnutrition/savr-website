@@ -11,6 +11,32 @@ import { getDeliveryMethod } from "@/lib/orders/deliveryMethods";
  *   3. Set GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
  *      and GOOGLE_SHEET_ID in the environment.
  */
+export async function isReturningCustomer(email: string): Promise<boolean> {
+  try {
+    const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+    const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, "\n");
+    const sheetId = process.env.GOOGLE_SHEET_ID;
+    if (!clientEmail || !privateKey || !sheetId) return false;
+
+    const auth = new google.auth.JWT({
+      email: clientEmail,
+      key: privateKey,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
+    const sheets = google.sheets({ version: "v4", auth });
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId,
+      range: "Orders!C:C",
+    });
+    const needle = email.toLowerCase();
+    return (res.data.values ?? []).some(
+      (row) => typeof row[0] === "string" && row[0].toLowerCase() === needle
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function appendOrderRow(order: OrderPayload) {
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(/\\n/g, "\n");

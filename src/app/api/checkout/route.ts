@@ -5,6 +5,7 @@ import { createYocoCheckout } from "@/lib/yoco";
 import { getShippingQuote } from "@/lib/courierguy";
 import { getDeliveryMethod } from "@/lib/orders/deliveryMethods";
 import { fetchSiteSettings } from "@/lib/sanity/fetchContent";
+import { isReturningCustomer } from "@/lib/googleSheets";
 import { readBoundedJson } from "@/lib/security/readJsonBody";
 import { checkRateLimit, getClientIp } from "@/lib/security/rateLimit";
 import { alertCheckoutFailure } from "@/lib/email";
@@ -50,14 +51,20 @@ export async function POST(request: NextRequest) {
   }
   const { quantity, deliveryMethod, flavourSlug, customer } = parsed.data;
 
-  const [settings, deliveryMeta] = [await fetchSiteSettings(), getDeliveryMethod(deliveryMethod)];
+  const deliveryMeta = getDeliveryMethod(deliveryMethod);
   if (!deliveryMeta) {
     return NextResponse.json({ error: "Unknown delivery method" }, { status: 400 });
   }
 
-  // Price and delivery fee are always recomputed server-side — never trust
-  // client-supplied amounts when creating a payment.
-  const unitPrice = settings.price;
+  // Price, discount, and delivery fee are always recomputed server-side —
+  // never trust client-supplied amounts when creating a payment.
+  const [settings, returning] = await Promise.all([
+    fetchSiteSettings(),
+    isReturningCustomer(customer.email).catch(() => false),
+  ]);
+  const listPrice = settings.price;
+  const discountPercent = returning ? 10 : 0;
+  const unitPrice = returning ? Math.round(listPrice * 0.9) : listPrice;
   let deliveryFee: number;
 
   if (deliveryMeta.fixedPrice !== null) {
@@ -67,7 +74,7 @@ export async function POST(request: NextRequest) {
       const rates = await getShippingQuote({
         deliveryAddress: { streetAddress: customer.street, city: customer.city, postalCode: customer.postal },
         quantity,
-        declaredValueRand: quantity * unitPrice,
+        declaredValueRand: quantity * listPrice,
       });
       if (!rates.length) throw new Error("no rates");
       deliveryFee = Math.min(...rates.map((r) => r.totalCharge));
@@ -95,6 +102,7 @@ export async function POST(request: NextRequest) {
     quantity,
     flavourSlug,
     unitPrice,
+    ...(discountPercent ? { discountPercent } : {}),
     deliveryMethod,
     deliveryFee,
     subtotal,
@@ -110,7 +118,11 @@ export async function POST(request: NextRequest) {
       amountRand: total,
       orderId,
       lineItems: [
-        { displayName: "SAVR Tomato Napoletana (510g)", quantity, priceRand: unitPrice },
+        {
+          displayName: `SAVR Tomato Napoletana (510g)${discountPercent ? ` (${discountPercent}% loyalty discount)` : ""}`,
+          quantity,
+          priceRand: unitPrice,
+        },
         { displayName: `Delivery — ${deliveryMeta.label}`, quantity: 1, priceRand: deliveryFee },
       ],
       successUrl: `${siteUrl}/order/success?orderId=${orderId}`,

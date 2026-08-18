@@ -15,6 +15,7 @@ export interface OrderPayload {
   quantity: number;
   flavourSlug: string;
   unitPrice: number;
+  discountPercent?: number;
   deliveryMethod: DeliveryMethodId;
   deliveryFee: number;
   subtotal: number;

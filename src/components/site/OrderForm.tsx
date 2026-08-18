@@ -39,6 +39,7 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [returningCustomer, setReturningCustomer] = useState<boolean | null>(null);
 
   const [quote, setQuote] = useState<{ rate: number | null; loading: boolean; error: string | null }>({
     rate: null,
@@ -47,6 +48,38 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
   });
 
   const addressComplete = Boolean(form.street && form.city && form.postal);
+
+  // Check whether this email belongs to a previous customer and show a
+  // 10% discount badge. Debounced 600 ms to avoid hammering the API while
+  // the user is still typing.
+  useEffect(() => {
+    const email = form.email.trim();
+    if (!email.includes("@") || !email.includes(".")) {
+      setReturningCustomer(null);
+      return;
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch("/api/check-returning-customer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+          signal: controller.signal,
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setReturningCustomer(data.returning ?? false);
+        }
+      } catch {
+        // Network error or aborted — silently ignore, no badge shown
+      }
+    }, 600);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [form.email]);
 
   // Live Courier Guy rate — refetched whenever the address or quantity
   // changes while Courier Guy is the selected method.
@@ -79,7 +112,8 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
 
   const deliveryOption = DELIVERY_METHODS.find((d) => d.id === delivery)!;
   const deliveryPrice = deliveryOption.fixedPrice ?? quote.rate;
-  const subtotal = price * quantity;
+  const effectiveUnitPrice = returningCustomer ? Math.round(price * 0.9) : price;
+  const subtotal = effectiveUnitPrice * quantity;
   const total = subtotal + (deliveryPrice ?? 0);
 
   const canSubmit = useMemo(() => {
@@ -154,6 +188,11 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
           <FormField label="First name" value={form.firstName} onChange={handleChange("firstName")} />
           <FormField label="Last name" value={form.lastName} onChange={handleChange("lastName")} />
           <FormField label="Email" type="email" value={form.email} onChange={handleChange("email")} className="sm:col-span-2" />
+          {returningCustomer === true && (
+            <p className="sm:col-span-2 -mt-2 rounded-xl bg-olive/10 px-4 py-2 font-body text-sm font-medium text-olive">
+              Welcome back! 10% loyalty discount applied. 🎉
+            </p>
+          )}
           <FormField label="Phone" value={form.phone} onChange={handleChange("phone")} className="sm:col-span-2" />
           <FormField label="Street address" value={form.street} onChange={handleChange("street")} className="sm:col-span-2" />
           <FormField label="City" value={form.city} onChange={handleChange("city")} />
@@ -213,8 +252,19 @@ export function OrderForm({ price, deliveryNotes }: { price: number; deliveryNot
           <div className="space-y-2 font-body text-sm">
             <div className="flex justify-between">
               <span>Tomato Napoletana × {quantity}</span>
-              <span>R{subtotal}</span>
+              <span className="flex items-center gap-2">
+                {returningCustomer && (
+                  <span className="text-ink-soft line-through">R{price * quantity}</span>
+                )}
+                R{subtotal}
+              </span>
             </div>
+            {returningCustomer && (
+              <div className="flex justify-between text-olive">
+                <span>Loyalty discount (10%)</span>
+                <span>−R{price * quantity - subtotal}</span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span>Delivery ({deliveryOption.label})</span>
               <span>{deliveryPrice === null ? "TBD" : deliveryPrice === 0 ? "Free" : `R${deliveryPrice}`}</span>
