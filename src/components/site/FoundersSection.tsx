@@ -8,7 +8,7 @@ export function FoundersSection({ heading }: { heading: string }) {
     <section id="about" className="mx-auto max-w-5xl scroll-mt-16 px-6 py-16">
       <h2 className="mb-6 font-display text-3xl font-bold">{heading}</h2>
       <Image
-        src="/images/team.jpg"
+        src="/images/team.png"
         alt="The SAVR Nutrition team — seven UCT entrepreneurship students"
         width={1200}
         height={800}
